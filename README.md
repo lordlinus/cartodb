@@ -4,7 +4,8 @@ cartodb installation instruction on ubuntu 12.10
     add-apt-repository ppa:mapnik/nightly-2.1
     add-apt-repository ppa:ubuntugis/ppa
 
-refresh packages
+refresh packages:
+
     apt-get update && apt-get upgrade 
 
 install dependencies for cartodb installation and few other helper tools
@@ -15,12 +16,13 @@ install dependencies for cartodb installation and few other helper tools
     postgresql-plpython-9.1 curl redis-server python-pip python-dev python-gdal libmapnik-dev \
     python-mapnik2 mapnik-utils libxslt-dev libgeos-c1 libgeos-dev pgbouncer varnish
 
-postgis installation 
+postgis installation:
+
     wget http://download.osgeo.org/postgis/source/postgis-2.0.3.tar.gz
-    tar -xvf postgis-2.0.3.tar.gz 
-    cd postgis-2.0.3/
-    ./configure --with-raster --with-topology
-    make && make install
+     tar -xvf postgis-2.0.3.tar.gz 
+     cd postgis-2.0.3/
+     ./configure --with-raster --with-topology
+     make && make install
 
 CartoDB depends on a geospatial database template named template_postgis. 
 
@@ -54,7 +56,7 @@ edit pgbouncer config /etc/pgbouncer/pgbouncer.ini and change settings as needed
 install node 0.8.9 using checkinstall
     
 Get the latest cartodb
-    
+
     git clone --recursive https://github.com/CartoDB/cartodb20.git
 
 The CartoDB SQL API component powers the SQL queries over HTTP. To install it:
@@ -88,15 +90,12 @@ comment out redis service from Procfile since it is started by init scripts on b
 
     rvmsudo foreman export upstart /etc/init -a cartodb -u cartodb
 
-
 edit /etc/init/cartodb.conf and start stops
-     
-     start on runlevel [2345]
-     stop on runlevel [016]
 
+    start on runlevel [2345]
+    stop on runlevel [016]
 
-varnish config /etc/varnish/default.vcl 
- 
+varnish config /etc/varnish/default.vcl
 
        backend default {
         .host = "127.0.0.1";
@@ -111,3 +110,6 @@ varnish config /etc/varnish/default.vcl
                  -f /etc/varnish/default.vcl \
                  -S /etc/varnish/secret \
                  -s malloc,1G"
+
+
+Installation Based on the original instructions from https://github.com/CartoDB/cartodb
