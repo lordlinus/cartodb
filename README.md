@@ -71,7 +71,7 @@ The Windshaft-cartodb component powers the CartoDB Maps API. To install it:
     npm install
 
 Install rvm:
-    curl -L https://get.rvm.io | bash
+       curl -L https://get.rvm.io | bash
 
 run cartodb
        cd cartodb20/
