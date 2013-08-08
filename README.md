@@ -54,6 +54,7 @@ edit pgbouncer config /etc/pgbouncer/pgbouncer.ini and change settings as needed
 install node 0.8.9 using checkinstall
     
 Get the latest cartodb
+    
     git clone --recursive https://github.com/CartoDB/cartodb20.git
 
 The CartoDB SQL API component powers the SQL queries over HTTP. To install it:
@@ -69,32 +70,42 @@ The Windshaft-cartodb component powers the CartoDB Maps API. To install it:
     cd Windshaft-cartodb
     git checkout master
     npm install
-Install rvm:
-    curl -L https://get.rvm.io | bash
-    run cartodb
-       cd cartodb20/
-       rvm rvmrc warning ignore /home/cartodb/cartodb20/.rvmrc
-       rvm install 1.9.2
-       rvm use 1.9.2
-       rvm rubygems latest
-       rvm use 1.9.2@cartodb --create && bundle install
-       add /usr/lib/postgresql/9.1/bin to the user path running the 
-       comment out redis service from Procfile since it is started by init scripts on boot
-       bundle exec foreman start -p 3000
-       install upstart scripts
-       rvmsudo foreman export upstart /etc/init -a cartodb -u cartodb
-       edit /etc/init/cartodb.conf and start stops
-       start on runlevel [2345]
-       stop on runlevel [016]
-       varnish config /etc/varnish/default.vcl 
-        backend default {
+
+Install RVM and bundle cartodb: # cd to cartodb20/
+
+    \curl -L https://get.rvm.io | bash # Install rvm
+    rvm rvmrc warning ignore /home/cartodb/cartodb20/.rvmrc
+    rvm install 1.9.2 
+    rvm use 1.9.2@cartodb --create && bundle install
+
+add /usr/lib/postgresql/9.1/bin to the user path running the 
+
+test if everything is working ok
+
+    bundle exec foreman start -p 3000
+
+comment out redis service from Procfile since it is started by init scripts on boot and install upstart
+
+    rvmsudo foreman export upstart /etc/init -a cartodb -u cartodb
+
+
+edit /etc/init/cartodb.conf and start stops
+     
+     start on runlevel [2345]
+     stop on runlevel [016]
+
+
+varnish config /etc/varnish/default.vcl 
+ 
+
+       backend default {
         .host = "127.0.0.1";
         .port = "3000";
         }
-
         sub vcl_recv {     
         return (lookup);
         }
+        
         DAEMON_OPTS="-a :80 \
                  -T localhost:6082 \
                  -f /etc/varnish/default.vcl \
