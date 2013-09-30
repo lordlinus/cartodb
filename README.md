@@ -1,6 +1,7 @@
-cartodb installation instruction on ubuntu 12.10
+cartodb installation instruction on ubuntu 12.x 
 
-    apt-get install python-software-properties
+    aptitude install software-properties-common (for 12.10)
+    apt-get install python-software-properties (for 12.04)
     add-apt-repository ppa:mapnik/nightly-2.1
     add-apt-repository ppa:ubuntugis/ppa
 
@@ -24,7 +25,7 @@ postgis installation:
      ./configure --with-raster --with-topology
      make && make install
 
-CartoDB depends on a geospatial database template named template_postgis. 
+CartoDB depends on a geospatial database template named template_postgis. change to postgres user (sudo su postgres)
 
     cd /usr/share/postgresql/9.1/contrib/postgis-2.0/
     createdb -E UTF8 template_postgis
