@@ -67,6 +67,12 @@ The CartoDB SQL API component powers the SQL queries over HTTP. To install it:
     git checkout master
     npm install
 
+Link missing sigc++ config
+    
+    cd /usr/include/sigc++-2.0
+    sudo ln -s /usr/lib/x86_64-linux-gnu/sigc++-2.0/include/sigc++config.h .
+
+
 The Windshaft-cartodb component powers the CartoDB Maps API. To install it:
 
     git clone git://github.com/CartoDB/Windshaft-cartodb.git
