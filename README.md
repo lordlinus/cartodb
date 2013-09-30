@@ -96,6 +96,7 @@ test if everything is working ok
 comment out redis service from Procfile since it is started by init scripts on boot and install upstart
 
     rvmsudo foreman export upstart /etc/init -a cartodb -u cartodb
+    rvmsudo passenger-install-nginx-module (install nginx)
 
 edit /etc/init/cartodb.conf and start stops
 
