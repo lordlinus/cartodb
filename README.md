@@ -15,7 +15,7 @@ install dependencies for cartodb installation and few other helper tools
     libgdal1-dev libjson0 python-simplejson libjson0-dev proj-bin proj-data libproj-dev \
     postgresql-9.1 postgresql-client-9.1 postgresql-contrib-9.1 postgresql-server-dev-9.1 \
     postgresql-plpython-9.1 curl redis-server python-pip python-dev python-gdal libmapnik-dev \
-    python-mapnik2 mapnik-utils libxslt-dev libgeos-c1 libgeos-dev pgbouncer varnish
+    python-mapnik2 mapnik-utils libxslt-dev libgeos-c1 libgeos-dev pgbouncer varnish git
 
 postgis installation:
 
