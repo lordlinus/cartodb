@@ -1,0 +1,20 @@
+    rpm -ivh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+    rpm -ivh http://yum.postgresql.org/9.1/redhat/rhel-6-x86_64/pgdg-redhat91-9.1-5.noarch.rpm
+
+    yum install git redis python-devel
+                postgresql91-devel postgresql91-server \
+                geos-devel  proj-devel  geos-devel geos-debuginfo geos-python\
+                libxslt-devel libtool-ltdl libicu libyaml libyaml-devel \
+                libpqxx \
+                proj proj-devel proj-debuginfo proj-epsg proj-nad \
+                json*   \
+    easy_install pip
+  
+    wget http://download.osgeo.org/postgis/source/postgis-2.1.1.tar.gz
+      ./configure --with-raster --with-topology && make && make install
+    wget http://downloads.sourceforge.net/project/boost/boost/1.55.0/boost_1_55_0.zip?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fboost%2Ffiles%2Fboost%2F1.55.0%2F&ts=1387174227&use_mirror=aarnet
+      ./bootstrap && ./b2 && ./b2 install
+    wget http://download.osgeo.org/gdal/1.10.1/gdal1101.zip
+      ./configure && make && make install
+
+    git clone https://github.com/mapnik/mapnik.git
