@@ -8,6 +8,7 @@
                 libpqxx \
                 proj proj-devel proj-debuginfo proj-epsg proj-nad \
                 json*   \
+                scons sqlite-devel pycairo-devel\
     easy_install pip
   
     wget http://download.osgeo.org/postgis/source/postgis-2.1.1.tar.gz
@@ -18,3 +19,5 @@
       ./configure && make && make install
 
     git clone https://github.com/mapnik/mapnik.git
+    git checkout v2.2.0
+    
