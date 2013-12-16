@@ -2,13 +2,13 @@
     rpm -ivh http://yum.postgresql.org/9.1/redhat/rhel-6-x86_64/pgdg-redhat91-9.1-5.noarch.rpm
 
     yum install git redis python-devel
-                postgresql91-devel postgresql91-server \
+                postgresql91-devel postgresql91-server postgresql91-plpython \
                 geos-devel  proj-devel  geos-devel geos-debuginfo geos-python\
                 libxslt-devel libtool-ltdl libicu libyaml libyaml-devel \
                 libpqxx \
                 proj proj-devel proj-debuginfo proj-epsg proj-nad \
                 json*   \
-                scons sqlite-devel pycairo-devel\
+                scons sqlite-devel pycairo-devel  bzip2-devel\
     easy_install pip
   
     wget http://download.osgeo.org/postgis/source/postgis-2.1.1.tar.gz
@@ -20,4 +20,21 @@
 
     git clone https://github.com/mapnik/mapnik.git
     git checkout v2.2.0
+    
+    sudo su postgres
+    POSTGIS_SQL_PATH=/usr/pgsql-9.1/share/contrib/postgis-2.1
+    createdb -E UTF8 template_postgis
+    createlang -d template_postgis plpgsql
+    psql -d postgres -c \
+    "UPDATE pg_database SET datistemplate='true' WHERE datname='template_postgis'"
+    psql -d template_postgis -f $POSTGIS_SQL_PATH/postgis.sql
+    psql -d template_postgis -f $POSTGIS_SQL_PATH/spatial_ref_sys.sql
+    psql -d template_postgis -f $POSTGIS_SQL_PATH/legacy.sql
+    psql -d template_postgis -f $POSTGIS_SQL_PATH/rtpostgis.sql
+    psql -d template_postgis -f $POSTGIS_SQL_PATH/topology.sql
+    psql -d template_postgis -c "GRANT ALL ON geometry_columns TO PUBLIC;"
+    psql -d template_postgis -c "GRANT ALL ON spatial_ref_sys TO PUBLIC;"
+    
+    
+    
     
