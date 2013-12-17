@@ -1,5 +1,7 @@
     rpm -ivh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
     rpm -ivh http://yum.postgresql.org/9.1/redhat/rhel-6-x86_64/pgdg-redhat91-9.1-5.noarch.rpm
+    
+    rpm -ivh  wget http://rpmfind.net/linux/centos/6.5/os/x86_64/Packages/libtool-ltdl-devel-2.2.6-15.5.el6.x86_64.rpm
 
     yum install git redis python-devel
                 postgresql91-devel postgresql91-server postgresql91-plpython \
@@ -19,7 +21,7 @@
       ./configure && make && make install
 
     git clone https://github.com/mapnik/mapnik.git
-    git checkout v2.1.1 # cartodb assumes you have this version, other versions are not compatible
+    git checkout v2.1.0 # cartodb assumes you have this version, other versions are not compatible
     
     sudo su postgres
     POSTGIS_SQL_PATH=/usr/pgsql-9.1/share/contrib/postgis-2.1
