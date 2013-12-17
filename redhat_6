@@ -1,6 +1,7 @@
     rpm -ivh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
     rpm -ivh http://yum.postgresql.org/9.1/redhat/rhel-6-x86_64/pgdg-redhat91-9.1-5.noarch.rpm
-    
+    rpm -ivh http://elgis.argeo.org/repos/6/elgis-release-6-6_0.noarch.rpm
+    rpm --nosignature -i http://repo.varnish-cache.org/redhat/varnish-3.0/el6/noarch/varnish-release/varnish-release-3.0-1.el6.noarch.rpm
     rpm -ivh  wget http://rpmfind.net/linux/centos/6.5/os/x86_64/Packages/libtool-ltdl-devel-2.2.6-15.5.el6.x86_64.rpm
 
     yum install git redis python-devel
