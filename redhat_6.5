@@ -13,6 +13,12 @@
                 json*   \
                 scons sqlite-devel pycairo-devel  bzip2-devel expat-devel\
     easy_install pip
+    
+    svn checkout http://libkml.googlecode.com/svn/trunk/ libkml
+    cd libkml
+    ./autogen.sh
+    ./configure
+    make && sudo make install
   
     wget http://download.osgeo.org/postgis/source/postgis-2.1.1.tar.gz
       ./configure --with-raster --with-topology && make && make install
@@ -39,9 +45,5 @@
     psql -d template_postgis -c "GRANT ALL ON spatial_ref_sys TO PUBLIC;"
     
     
-    svn checkout http://libkml.googlecode.com/svn/trunk/ libkml
-    cd libkml
-    ./autogen.sh
-    ./configure
-    make && sudo make install
+
     
