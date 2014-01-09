@@ -83,6 +83,7 @@ The Windshaft-cartodb component powers the CartoDB Maps API. To install it:
 Install RVM and bundle cartodb: # cd to cartodb20/
 
     \curl -L https://get.rvm.io | bash -s stable --ruby=1.9.2
+    source /etc/profile.d/rvm.sh
     rvm rvmrc warning ignore /home/cartodb/cartodb20/.rvmrc
     #rvm install 1.9.2 
     rvm use 1.9.2@cartodb --create && bundle install

@@ -1,5 +1,12 @@
 ogr2ogr exit code: 256 and import error
+======================================
 
-  upgrade gdal to 1.10.1
-  wget http://download.osgeo.org/gdal/1.10.1/gdal-1.10.1.tar.gz
-  
+upgrade gdal to 1.10.1
+    $ wget http://download.osgeo.org/gdal/1.10.1/gdal-1.10.1.tar.gz
+    $ ./configure
+    $ make
+    # make install
+In order to run GDAL after installing it is necessary for the shared library to be findable. 
+This can often be accomplished by setting LD_LIBRARY_PATH to include /usr/local/lib.
+Edit /etc/ld.so.conf and add /usr/local/lib to the list if is isn't. 
+Then run /sbin/ldconfig.
