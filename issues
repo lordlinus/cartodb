@@ -1,5 +1,7 @@
 ogr2ogr exit code: 256 and import error
 
   upgrade gdal to 1.10.1
-  wget http://download.osgeo.org/gdal/1.10.1/gdal-1.10.1.tar.gz
-  
+  $ wget http://download.osgeo.org/gdal/1.10.1/gdal-1.10.1.tar.gz
+  $ ./configure
+  $ make
+  # make install
