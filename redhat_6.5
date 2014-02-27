@@ -37,6 +37,7 @@
 
     git clone https://github.com/mapnik/mapnik.git
     git checkout v2.1.0 # cartodb assumes you have this version, other versions are not compatible
+    ./configure CUSTOM_LDFLAGS="-licudata" # if error about the ‘boost::error_cant_deduce_type’ requested
     ./configure && make && sudo make install
     
     sudo su postgres
