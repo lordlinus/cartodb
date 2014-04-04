@@ -1,0 +1,103 @@
+worker_processes  auto;
+error_log  logs/error.log  debug;
+pid     /run/nginx.pid;
+events {
+    worker_connections  1024;
+}
+
+http {
+
+    include       mime.types;
+    default_type  application/octet-stream;
+
+    sendfile        on;
+    tcp_nopush     on;
+
+    keepalive_timeout  120;
+    client_max_body_size 0;
+    gzip  on;
+
+    upstream cartodb_sql{
+        server  127.0.0.1:8080;
+    }
+
+    upstream cartodb_main{
+        server 127.0.0.1:5000;
+    }
+
+    upstream cartodb_tiler{
+        server 127.0.0.1:8181;
+    }
+
+    server {
+
+        listen                80;
+
+
+        location  /api/v2/sql {
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header Host $http_host;
+            proxy_set_header X-NginX-Proxy true;
+            proxy_redirect off;
+            proxy_pass http://cartodb_sql;
+            break;
+        }
+
+        location  /api/v1/sql {
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header Host $http_host;
+            proxy_set_header X-NginX-Proxy true;
+            proxy_redirect off;
+            proxy_pass http://cartodb_sql;
+            break;
+        }
+
+        location ~* ^/assets/ {
+            add_header Cache-Control public;
+            root    /home/user/cartodb20/public;
+        }
+
+        location  /api/v1/map {
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header Host $http_host;
+            proxy_set_header X-NginX-Proxy true;
+            proxy_redirect off;
+            if ($is_args != "") {
+                add_header X-debug-message "$is_args";
+                proxy_pass http://cartodb_tiler;
+            }
+            if ($is_args = "") {
+                add_header X-debug-message "$is_args";
+                proxy_pass http://cartodb_main;
+            }
+
+        }
+
+
+
+        location / {
+
+            if ($http_origin) {
+                add_header Access-Control-Allow-Origin *;
+                add_header Access-Control-Allow-Methods "GET,POST,OPTIONS,PUT";
+                add_header         Access-Control-Allow-Headers   Content-Type;
+                add_header         Access-Control-Max-Age         86400;
+            }
+            if ($request_method = OPTIONS ) {
+                add_header Content-Length 0;
+                add_header Content-Type text/plain;
+                return 200;
+            }
+            proxy_redirect     off;
+            proxy_set_header   X-Real-IP        $remote_addr;
+            proxy_set_header   X-Forwarded-For  $proxy_add_x_forwarded_for;
+            proxy_set_header Host $http_host;
+            proxy_set_header X-NginX-Proxy true;
+            proxy_pass http://cartodb_main;
+        }
+    }
+
+}
