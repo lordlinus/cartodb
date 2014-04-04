@@ -1,1 +1,1 @@
- INstalltion instructions and Notes to install cartodb
+ Installtion instructions and Notes to install cartodb
