@@ -1,12 +1,11 @@
     rpm -ivh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
-
     rpm -ivh http://yum.postgresql.org/9.3/redhat/rhel-6-x86_64/pgdg-redhat93-9.3-1.noarch.rpm
     rpm -ivh http://elgis.argeo.org/repos/6/elgis-release-6-6_0.noarch.rpm
     rpm --nosignature -i http://repo.varnish-cache.org/redhat/varnish-3.0/el6/noarch/varnish-release/varnish-release-3.0-1.el6.noarch.rpm
 
     yum install -y gcc gcc-c++ automake svn autoconf git curl-devel redis python-devel \
-                postgresql93-devel postgresql93-server postgresql93-plpython pgbouncer\
-                geos-devel  proj-devel  geos-devel geos-debuginfo geos-python\
+                postgresql93-devel postgresql93-server postgresql93-plpython postgresql93-contrib pgbouncer \
+                geos-devel  proj-devel  geos-devel geos-debuginfo geos-python \
                 libxslt-devel libtool libtool-ltdl libtool-ltdl-devel libicu libicu-devel libtiff-devel libjpeg-devel libyaml libyaml-devel \
                 libpqxx \
                 proj proj-devel proj-debuginfo proj-epsg proj-nad \
@@ -25,78 +24,80 @@
     make && sudo make install
 
     wget http://downloads.sourceforge.net/project/boost/boost/1.55.0/boost_1_55_0.zip?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fboost%2Ffiles%2Fboost%2F1.55.0%2F&ts=1387174227&use_mirror=aarnet
-      ./bootstrap && ./b2 && ./b2 install
+        ./bootstrap && ./b2 && ./b2 install
       
       
     wget http://download.osgeo.org/gdal/1.10.1/gdal1101.zip
-    Build gdal with postgres support
-        edit ~/.bash_profile to include pg_config location
-        export PATH=$PATH:/usr/pgsql-9.3/bin/
-      ./configure && make && sudo make install
+        Build gdal with postgres support
+            edit ~/.bash_profile to include pg_config location
+            export PATH=$PATH:/usr/pgsql-9.3/bin/
+            ./configure && make && sudo make install
+            export PATH=$PATH:/usr/local/bin/
+            pip install gdal
+          
   
     wget http://download.osgeo.org/postgis/source/postgis-2.1.1.tar.gz
-      ./configure --with-raster --with-topology && make && sudo make install
+        ./configure --with-raster --with-topology && make && sudo make install
 
 
     check ld_config file to include the 
         /usr/pgsql-9.3/lib/
         /usr/local/lib/
-    sudo ldconfig -v # ensure gdal and all other libraries are found
+        sudo ldconfig -v # ensure gdal and all other libraries are found
 
 
     git clone https://github.com/mapnik/mapnik.git
-    git checkout v2.1.x # cartodb assumes you have this version, other versions are not compatible
-    export CUSTOM_LDFLAGS="-licudata"
-    ./configure CUSTOM_LDFLAGS="-licudata" # if error about the ‘boost::error_cant_deduce_type’ requested
-    make && sudo make install
+        git checkout v2.1.x # cartodb assumes you have this version, other versions are not compatible
+        export CUSTOM_LDFLAGS="-licudata"
+        ./configure CUSTOM_LDFLAGS="-licudata" # if error about the ‘boost::error_cant_deduce_type’ requested
+        make && sudo make install
     
     sudo su postgres
-    POSTGIS_SQL_PATH=/usr/pgsql-9.3/share/contrib/postgis-2.1
-    createdb -E UTF8 template_postgis
-    createlang -d template_postgis plpgsql
-    psql -d postgres -c \
-    "UPDATE pg_database SET datistemplate='true' WHERE datname='template_postgis'"
-    psql -d template_postgis -f $POSTGIS_SQL_PATH/postgis.sql
-    psql -d template_postgis -f $POSTGIS_SQL_PATH/spatial_ref_sys.sql
-    psql -d template_postgis -f $POSTGIS_SQL_PATH/legacy.sql
-    psql -d template_postgis -f $POSTGIS_SQL_PATH/rtpostgis.sql
-    psql -d template_postgis -f $POSTGIS_SQL_PATH/topology.sql
-    psql -d template_postgis -c "GRANT ALL ON geometry_columns TO PUBLIC;"
-    psql -d template_postgis -c "GRANT ALL ON spatial_ref_sys TO PUBLIC;"
+        POSTGIS_SQL_PATH=/usr/pgsql-9.3/share/contrib/postgis-2.1
+        createdb -E UTF8 template_postgis
+        createlang -d template_postgis plpgsql
+        psql -d postgres -c \
+        "UPDATE pg_database SET datistemplate='true' WHERE datname='template_postgis'"
+        psql -d template_postgis -f $POSTGIS_SQL_PATH/postgis.sql
+        psql -d template_postgis -f $POSTGIS_SQL_PATH/spatial_ref_sys.sql
+        psql -d template_postgis -f $POSTGIS_SQL_PATH/legacy.sql
+        psql -d template_postgis -f $POSTGIS_SQL_PATH/rtpostgis.sql
+        psql -d template_postgis -f $POSTGIS_SQL_PATH/topology.sql
+        psql -d template_postgis -c "GRANT ALL ON geometry_columns TO PUBLIC;"
+        psql -d template_postgis -c "GRANT ALL ON spatial_ref_sys TO PUBLIC;"
     
+    #loosen  security and trust the local connections
     /var/lib/pgsql/9.3/data/pg_hba.conf 
-        loosen  security and trust the local connections
         
     /etc/pgbouncer/pgbouncer.ini 
-    
-    [databases]
-        postgres = host=127.0.0.1 port=5432
-        * = host=127.0.0.1 port=5432
-    
-    [pgbouncer]
-        auth_type = trust
-        auth_file = /etc/pgbouncer/userlist.txt ; ensure this file exists
-        admin_users = postgres
-        stats_users = postgres,root
+        [databases]
+            postgres = host=127.0.0.1 port=5432
+            * = host=127.0.0.1 port=5432
+        
+        [pgbouncer]
+            auth_type = trust
+            auth_file = /etc/pgbouncer/userlist.txt ; ensure this file exists
+            admin_users = postgres
+            stats_users = postgres,root
     
      wget http://nodejs.org/dist/v0.8.9/node-v0.8.9.tar.gz
-     ./configure && make && sudo make install
+        ./configure && make && sudo make install
     
     
     git clone git://github.com/CartoDB/CartoDB-SQL-API.git
-    cd CartoDB-SQL-API
-    git checkout master
-    npm install
+        cd CartoDB-SQL-API
+        git checkout master
+        npm install
     
     git clone git://github.com/CartoDB/Windshaft-cartodb.git
-    cd Windshaft-cartodb
-    git checkout master
-    npm install
+        cd Windshaft-cartodb
+        git checkout master
+        npm install
     
     git clone --recursive https://github.com/CartoDB/cartodb20.git
-    \curl -L https://get.rvm.io | bash -s stable --ruby=1.9.2
-    source /etc/profile.d/rvm.sh
-    #rvm rvmrc warning ignore ~/cartodb20/.rvmrc
-    rvm install 1.9.2 
-    rvm use 1.9.2@cartodb --create && bundle install
-    foreman start
+        \curl -L https://get.rvm.io | bash -s stable --ruby=1.9.2
+        source /etc/profile.d/rvm.sh
+        #rvm rvmrc warning ignore ~/cartodb20/.rvmrc
+        rvm install 1.9.2 
+        rvm use 1.9.2@cartodb --create && bundle install
+        foreman start
