@@ -6,13 +6,14 @@
     rpm --nosignature -i http://repo.varnish-cache.org/redhat/varnish-3.0/el6/noarch/varnish-release/varnish-release-3.0-1.el6.noarch.rpm
 
     yum install -y gcc gcc-c++ automake svn autoconf git curl-devel redis python-devel \
-                postgresql93-devel postgresql93-server postgresql93-plpython \
+                postgresql93-devel postgresql93-server postgresql93-plpython pgbouncer\
                 geos-devel  proj-devel  geos-devel geos-debuginfo geos-python\
                 libxslt-devel libtool libtool-ltdl libtool-ltdl-devel libicu libicu-devel libtiff-devel libjpeg-devel libyaml libyaml-devel \
                 libpqxx \
                 proj proj-devel proj-debuginfo proj-epsg proj-nad \
                 json*   \
-                scons sqlite-devel pycairo-devel  bzip2-devel expat-devel
+                scons sqlite-devel pycairo-devel  bzip2-devel expat-devel \
+                nginx
                 
     rpm -ivh  http://rpmfind.net/linux/centos/6.5/os/x86_64/Packages/libtool-ltdl-devel-2.2.6-15.5.el6.x86_64.rpm
 
@@ -29,6 +30,9 @@
       
       
     wget http://download.osgeo.org/gdal/1.10.1/gdal1101.zip
+    Build gdal with postgres support
+        edit ~/.bash_profile to include pg_config location
+        export PATH=$PATH:/usr/pgsql-9.3/bin/
       ./configure && make && sudo make install
   
     wget http://download.osgeo.org/postgis/source/postgis-2.1.1.tar.gz
@@ -58,6 +62,35 @@
     psql -d template_postgis -f $POSTGIS_SQL_PATH/topology.sql
     psql -d template_postgis -c "GRANT ALL ON geometry_columns TO PUBLIC;"
     psql -d template_postgis -c "GRANT ALL ON spatial_ref_sys TO PUBLIC;"
+    
+    
+     wget http://nodejs.org/dist/v0.8.9/node-v0.8.9.tar.gz
+     ./configure && make && sudo make install
+    
+    
+    git clone git://github.com/CartoDB/CartoDB-SQL-API.git
+    cd CartoDB-SQL-API
+    git checkout master
+    npm install
+    
+    git clone git://github.com/CartoDB/Windshaft-cartodb.git
+    cd Windshaft-cartodb
+    git checkout master
+    npm install
+    
+    git clone --recursive https://github.com/CartoDB/cartodb20.git
+    \curl -L https://get.rvm.io | bash -s stable --ruby=1.9.2
+    source /etc/profile.d/rvm.sh
+    #rvm rvmrc warning ignore ~/cartodb20/.rvmrc
+    rvm install 1.9.2 
+    rvm use 1.9.2@cartodb --create && bundle install
+    foreman start
+    
+    
+    
+    Notes on installing in production mode
+    
+    export RAILS_ENV=production
     
     
 
