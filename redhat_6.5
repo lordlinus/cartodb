@@ -1,7 +1,6 @@
     rpm -ivh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
 
     rpm -ivh http://yum.postgresql.org/9.3/redhat/rhel-6-x86_64/pgdg-redhat93-9.3-1.noarch.rpm
-    or use postgres-9.3
     rpm -ivh http://elgis.argeo.org/repos/6/elgis-release-6-6_0.noarch.rpm
     rpm --nosignature -i http://repo.varnish-cache.org/redhat/varnish-3.0/el6/noarch/varnish-release/varnish-release-3.0-1.el6.noarch.rpm
 
@@ -42,6 +41,7 @@
     check ld_config file to include the 
         /usr/pgsql-9.3/lib/
         /usr/local/lib/
+    sudo ldconfig -v # ensure gdal and all other libraries are found
 
 
     git clone https://github.com/mapnik/mapnik.git
@@ -50,7 +50,7 @@
     ./configure && make && sudo make install
     
     sudo su postgres
-    POSTGIS_SQL_PATH=/usr/pgsql-9.1/share/contrib/postgis-2.1
+    POSTGIS_SQL_PATH=/usr/pgsql-9.3/share/contrib/postgis-2.1
     createdb -E UTF8 template_postgis
     createlang -d template_postgis plpgsql
     psql -d postgres -c \
@@ -63,6 +63,20 @@
     psql -d template_postgis -c "GRANT ALL ON geometry_columns TO PUBLIC;"
     psql -d template_postgis -c "GRANT ALL ON spatial_ref_sys TO PUBLIC;"
     
+    /var/lib/pgsql/9.3/data/pg_hba.conf 
+        loosen teh sucurity and trust the local connections
+        
+    /etc/pgbouncer/pgbouncer.ini 
+    
+    [databases]
+        postgres = host=127.0.0.1 port=5432
+        * = host=127.0.0.1 port=5432
+    
+    [pgbouncer]
+        auth_type = trust
+        auth_file = /etc/pgbouncer/userlist.txt ; ensure this file exists
+        admin_users = postgres
+        stats_users = postgres,root
     
      wget http://nodejs.org/dist/v0.8.9/node-v0.8.9.tar.gz
      ./configure && make && sudo make install
@@ -89,9 +103,4 @@
     
     
     Notes on installing in production mode
-    
-    export RAILS_ENV=production
-    
-    
-
-    
+ 
