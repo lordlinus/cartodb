@@ -10,3 +10,10 @@ In order to run GDAL after installing it is necessary for the shared library to 
 This can often be accomplished by setting LD_LIBRARY_PATH to include /usr/local/lib.
 Edit /etc/ld.so.conf and add /usr/local/lib to the list if is isn't. 
 Then run /sbin/ldconfig.
+
+
+Mapnik make error: ‘boost::error_cant_deduce_type’ requested
+============================================================
+make clean
+./configure CUSTOM_LDFLAGS="-licudata" # if error about the 
+make && sudo make install
