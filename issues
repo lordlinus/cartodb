@@ -12,6 +12,13 @@ Edit /etc/ld.so.conf and add /usr/local/lib to the list if is isn't.
 Then run /sbin/ldconfig.
 
 
+__main__.gdal_config_error: [Errno 2] No such file or directory
+======================================
+
+ensure PATH includes gdal-config 
+/usr/lib64/qt-3.3/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/home/ec2-user/bin:/usr/pgsql-9.3/bin:/home/ec2-user/.rvm/bin
+
+
 Mapnik make error: ‘boost::error_cant_deduce_type’ requested
 ============================================================
 make clean
