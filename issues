@@ -30,3 +30,7 @@ make && sudo make install
 app/models/layer.rb:52:in `validate'
 
 Edit StatsD config
+
+resque Permission denied - /tmp/imports/ ...... tempfile.rb:330:in `mkdir'
+ ============================================================
+ create /tmp directory or what ever directory is writable by the user 
