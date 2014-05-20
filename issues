@@ -41,3 +41,12 @@ resque Permission denied - /tmp/imports/ ...... tempfile.rb:330:in `mkdir'
 export CPLUS_INCLUDE_PATH=/usr/include/gdal
 export C_INCLUDE_PATH=/usr/include/gdal
 pip install GDAL
+
+
+
+Processing by Api::Json::TablesController#create as JSON
+[table#create error] === #<SocketError: getaddrinfo: Name or service not known>
+
+check hosts file for the domain user entry
+
+
