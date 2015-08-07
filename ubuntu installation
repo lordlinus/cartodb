@@ -122,3 +122,13 @@ varnish config /etc/varnish/default.vcl
 
 
 Installation Based on the original instructions from https://github.com/CartoDB/cartodb
+
+To generate static assests 
+
+    install node 0.10.0
+    install compass
+    go to ~/cartodb/lib/builds
+    npm install
+    grunt
+    
+    Assets are available at ~/cartodb/public/assets/
